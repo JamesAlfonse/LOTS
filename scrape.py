@@ -7,7 +7,7 @@ from datetime import datetime
 def scrape_lots_project():
     url = 'https://lots-project.com/'  # Replace with the actual data URL if different
     headers = {
-        'User-Agent': 'Mozilla/5.0 (compatible; LOTS-Scraper/1.0; +https://github.com/your-username/lots-scraper)'
+        'User-Agent': 'LOTS-Scraper/1.0'
     }
 
     try:
