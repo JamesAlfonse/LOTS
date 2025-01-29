@@ -34,12 +34,12 @@ def scrape_lots_project():
     headers = []
     header_row = table.find('thead')
     if header_row:
-        headers = [th.text.strip() for th in header_row.find_all('th')]
+        headers = [th.get_text(strip=True) for th in header_row.find_all('th')]
     else:
         # If there's no thead, assume the first row contains headers
         first_row = table.find('tr')
         if first_row:
-            headers = [th.text.strip() for th in first_row.find_all(['th', 'td'])]
+            headers = [th.get_text(strip=True) for th in first_row.find_all(['th', 'td'])]
         else:
             print("No headers found in the table.")
             return
@@ -58,7 +58,17 @@ def scrape_lots_project():
 
     for row in rows:
         cols = row.find_all(['td', 'th'])
-        cols_text = [col.get_text(strip=True) for col in cols]
+        cols_text = []
+        for col in cols:
+            divs = col.find_all('div')
+            if len(divs) > 1:
+                # If multiple divs, join their text with "; "
+                texts = [div.get_text(strip=True) for div in divs]
+                combined_text = '; '.join(texts)
+                cols_text.append(combined_text)
+            else:
+                # If only one div or no divs, get the text normally
+                cols_text.append(col.get_text(strip=True))
         if cols_text:  # Avoid empty rows
             data.append(cols_text)
 
