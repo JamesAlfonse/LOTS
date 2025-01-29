@@ -173,4 +173,3 @@ express.adobe.com,Phishing,Adobe,2025-01-29,To be reviewed
 localhost.run,C&C,Localhost.run,2025-01-29,To be reviewed
 *.requestbin.net,C&C,RequestBin,2025-01-29,To be reviewed
 clbin.com,C&CExfiltrationDownload,Clbin,2025-01-29,To be reviewed
-ix.io,C&CExfiltrationDownload,Ix.io,2025-01-29,To be reviewed
