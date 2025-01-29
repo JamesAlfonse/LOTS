@@ -1,5 +1,5 @@
 Website,Tags,Service Provider,Date Scraped,Status
-raw.githubusercontent.com,Phishing; C&C; Download,Github,2025-01-29,To be reviewed
+raw.githubusercontent.com,Phishing; C&C; Download,Github,2025-01-29,Test
 github.com,Phishing; Download,Github,2025-01-29,To be reviewed
 1drv.ms,Phishing,Microsoft,2025-01-29,To be reviewed
 1drv.com,Phishing; Download,Microsoft,2025-01-29,To be reviewed
@@ -173,4 +173,3 @@ express.adobe.com,Phishing,Adobe,2025-01-29,To be reviewed
 localhost.run,C&C,Localhost.run,2025-01-29,To be reviewed
 *.requestbin.net,C&C,RequestBin,2025-01-29,To be reviewed
 clbin.com,C&C; Exfiltration; Download,Clbin,2025-01-29,To be reviewed
-ix.io,C&C; Exfiltration; Download,Ix.io,2025-01-29,To be reviewed
