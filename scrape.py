@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
+import os
+from datetime import datetime
 
 def scrape_lots_project():
     url = 'https://lots-project.com/'  # Replace with the actual data URL if different
@@ -42,6 +44,10 @@ def scrape_lots_project():
             print("No headers found in the table.")
             return
 
+    # Add new columns
+    headers.append('Date Scraped')
+    headers.append('Status')
+
     # Extract table rows
     data = []
     tbody = table.find('tbody')
@@ -62,14 +68,51 @@ def scrape_lots_project():
 
     # Define CSV file path
     csv_file = 'data.csv'
+    file_exists = os.path.isfile(csv_file)
+
+    # Prepare new data with additional columns
+    date_scraped = datetime.utcnow().strftime('%Y-%m-%d')  # UTC date
+    new_data = []
+    for row in data:
+        row_with_date = row + [date_scraped, "To be reviewed"]
+        new_data.append(row_with_date)
+
+    # Read existing data to avoid duplicates
+    existing_entries = set()
+    if file_exists:
+        try:
+            with open(csv_file, 'r', newline='', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                existing_headers = next(reader, None)
+                # Assuming the first N columns uniquely identify a row
+                # Adjust the range as per your data structure
+                unique_id_indices = range(len(headers) - 2)  # Exclude Date and Status
+                for row in reader:
+                    unique_id = tuple(row[i] for i in unique_id_indices)
+                    existing_entries.add(unique_id)
+        except IOError as e:
+            print(f"Error reading {csv_file}: {e}")
+            return
+
+    # Filter out duplicates
+    filtered_new_data = []
+    for row in new_data:
+        unique_id = tuple(row[i] for i in range(len(headers) - 2))  # Exclude Date and Status
+        if unique_id not in existing_entries:
+            filtered_new_data.append(row)
+
+    if not filtered_new_data:
+        print("No new data to append.")
+        return
 
     # Write data to CSV
     try:
-        with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+        with open(csv_file, 'a' if file_exists else 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(headers)  # Write header row
-            writer.writerows(data)    # Write data rows
-        print(f"Data successfully written to {csv_file}")
+            if not file_exists:
+                writer.writerow(headers)  # Write header row if file doesn't exist
+            writer.writerows(filtered_new_data)  # Write new data rows
+        print(f"Data successfully {'appended to' if file_exists else 'written to'} {csv_file}")
     except IOError as e:
         print(f"Error writing to {csv_file}: {e}")
 
